@@ -11,10 +11,7 @@ def zap(input_url, archive, domain, host, internal, robots, proxies):
     """Extract links from robots.txt and sitemap.xml."""
     if archive:
         print('%s Fetching URLs from archive.org' % run)
-        if False:
-            archived_urls = time_machine(domain, 'domain')
-        else:
-            archived_urls = time_machine(host, 'host')
+        archived_urls = time_machine(host, 'host')
         print('%s Retrieved %i URLs from archive.org' % (
             good, len(archived_urls) - 1))
         for url in archived_urls:

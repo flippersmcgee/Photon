@@ -105,7 +105,7 @@ def entropy(string):
         result = float(string.encode('utf-8').count(
             chr(number))) / len(string.encode('utf-8'))
         if result != 0:
-            entropy = entropy - result * math.log(result, 2)
+            entropy -= result * math.log(result, 2)
     return entropy
 
 
@@ -140,9 +140,8 @@ def extract_headers(headers):
 def top_level(url, fix_protocol=True):
     """Extract the top level domain from an URL."""
     ext = tld.get_tld(url, fix_protocol=fix_protocol)
-    toplevel = '.'.join(urlparse(url).netloc.split('.')[-2:]).split(
+    return '.'.join(urlparse(url).netloc.split('.')[-2:]).split(
         ext)[0] + ext
-    return toplevel
 
 
 def is_proxy_list(v, proxies):

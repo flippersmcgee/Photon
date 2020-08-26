@@ -5,7 +5,6 @@ import tempfile
 
 def prompt(default=None):
     """Present the user a prompt."""
-    editor = 'nano'
     with tempfile.NamedTemporaryFile(mode='r+') as tmpfile:
         if default:
             tmpfile.write(default)
@@ -15,6 +14,7 @@ def prompt(default=None):
         is_child = child_pid == 0
 
         if is_child:
+            editor = 'nano'
             os.execvp(editor, [editor, tmpfile.name])
         else:
             os.waitpid(child_pid, 0)

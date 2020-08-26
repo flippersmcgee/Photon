@@ -267,9 +267,11 @@ def extractor(url):
             else:
                 verb('Internal page', link)
                 usable_url = remove_file(url)
-                if usable_url.endswith('/'):
-                    internal.add(usable_url + link)
-                elif link.startswith('/'):
+                if (
+                    usable_url.endswith('/')
+                    or not usable_url.endswith('/')
+                    and link.startswith('/')
+                ):
                     internal.add(usable_url + link)
                 else:
                     internal.add(usable_url + '/' + link)
@@ -297,7 +299,7 @@ def jscanner(url):
         # Combining the items because one of them is always empty
         match = match[0] + match[1]
         # Making sure it's not some JavaScript code
-        if not re.search(r'[}{><"\']', match) and not match == '/':
+        if not re.search(r'[}{><"\']', match) and match != '/':
             verb('JS endpoint', match)
             endpoints.add(match)
 
@@ -349,16 +351,14 @@ if not only_urls:
         if isinstance(match, tuple):
             for x in match:  # Because "match" is a tuple
                 if x != '':  # If the value isn't empty
-                    if intel_name == "CREDIT_CARD":
-                        if not luhn(match):
-                            # garbage number
-                            continue
+                    if intel_name == "CREDIT_CARD" and not luhn(match):
+                        # garbage number
+                        continue
                     intel.add("%s:%s" % (intel_name, x))
         else:
-            if intel_name == "CREDIT_CARD":
-                if not luhn(match):
-                    # garbage number
-                    continue
+            if intel_name == "CREDIT_CARD" and not luhn(match):
+                # garbage number
+                continue
             intel.add("%s:%s:%s" % (url, intel_name, match))
         for url in external:
             try:
